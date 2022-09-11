@@ -8,35 +8,35 @@ resource "aws_lb" "eks" {
   ]
 }
 
-# resource "aws_lb_listener" "https" {
-#   load_balancer_arn = aws_lb.eks.arn
-#   port              = "443"
-#   protocol          = "HTTPS"
-#   certificate_arn   = aws_acm_certificate_validation.alb.certificate_arn
+resource "aws_lb_listener" "https" {
+  load_balancer_arn = aws_lb.eks.arn
+  port              = "443"
+  protocol          = "HTTPS"
+  certificate_arn   = aws_acm_certificate_validation.alb.certificate_arn
 
-#   default_action {
-#     type = "fixed-response"
-#     fixed_response {
-#       content_type = "text/plain"
-#       message_body = "Not found."
-#       status_code  = "404"
-#     }
-#   }
-# }
+  default_action {
+    type = "fixed-response"
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "Not found."
+      status_code  = "404"
+    }
+  }
+}
 
-# resource "aws_lb_listener_rule" "argo" {
-#   listener_arn = aws_lb_listener.https.arn
-#   priority     = 100
-#   action {
-#     type             = "forward"
-#     target_group_arn = aws_lb_target_group.alb_argo.arn
-#   }
-#   condition {
-#     path_pattern {
-#       values = ["/*"]
-#     }
-#   }
-# }
+resource "aws_lb_listener_rule" "argo" {
+  listener_arn = aws_lb_listener.https.arn
+  priority     = 100
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.alb_argo.arn
+  }
+  condition {
+    path_pattern {
+      values = ["/*"]
+    }
+  }
+}
 
 resource "aws_lb_target_group" "alb_argo" {
   name        = local.alb.target_group.argo
