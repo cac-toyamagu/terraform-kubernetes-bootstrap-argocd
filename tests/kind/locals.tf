@@ -2,7 +2,7 @@ locals {
   kind = {
     cluster_name = var.kind_cluster_name
   }
-  helm_values = var.read_local_helm_values ? [templatefile("${path.module}/values.yaml", {})] : null
+  helm_values = var.read_local_helm_values ? [templatefile("${path.module}/values.yaml", {})] : []
   argocd_applications_vars = {
     repo_url        = var.argocd_apps_repo
     target_revision = var.argocd_apps_target_revision
