@@ -38,7 +38,7 @@ module "argocd" {
       proxy    = ""
     },
     {
-      url      = "https://github.com/cac-toyamagu/terraform-bootstrap-argocd.git"
+      url      = "https://github.com/cac-toyamagu/terraform-kubernetes-bootstrap-argocd.git"
       username = ""
       password = ""
       proxy    = ""

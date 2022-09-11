@@ -33,7 +33,7 @@ jobs:
         working-directory: ./tests/kind
       
       - name: Terraform apply
-        run: terraform apply -auto-approve -input=false
+        run: terraform apply -auto-approve -input=false -var="argocd_apps_target_revision=${{ github.event.pull_request.head.ref }}"
       
       - name: Setup kubectl
         uses: azure/setup-kubectl@v3
