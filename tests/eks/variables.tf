@@ -58,5 +58,4 @@ variable "source_cidrs" {
 variable "public_root_domain" {
   description = "Public root domain"
   type        = string
-  default     = "anderson-dirac.com"
 }

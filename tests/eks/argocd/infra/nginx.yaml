@@ -5,11 +5,43 @@ metadata:
 spec:
   destination:
     name: ''
-    namespace: argocd-apps
+    namespace: infra
     server: 'https://kubernetes.default.svc'
+  project: infra
   source:
     path: ''
     repoURL: 'https://helm.nginx.com/stable'
     targetRevision: 0.14.0
     chart: nginx-ingress
-  project: argocd-apps
+    helm:
+      values: |
+        # See: https://github.com/nginxinc/kubernetes-ingress/blob/main/deployments/helm-chart/values.yaml
+        controller:
+          ## Add a location based on the value of health-status-uri to the default server. The location responds with the 200 status code for any request.
+          ## Useful for external health-checking of the Ingress Controller.
+          healthStatus: true # CHANGED
+          ## Sets the URI of health status location in the default server. Requires controller.healthStatus.
+          healthStatusURI: "/nginx-health"
+          
+          service:
+            ## The type of service to create for the Ingress Controller. CHANGED
+            type: NodePort
+            httpPort:
+              ## Enables the HTTP port for the Ingress Controller service.
+              enable: true
+              ## The HTTP port of the Ingress Controller service.
+              port: 80
+              ## The custom NodePort for the HTTP port. Requires controller.service.type set to NodePort.
+              nodePort: 30080
+              ## The HTTP port on the POD where the Ingress Controller service is running.
+              targetPort: 80
+            httpsPort:
+              ## Enables the HTTPS port for the Ingress Controller service.
+              enable: true
+              ## The HTTPS port of the Ingress Controller service.
+              port: 443
+              ## The custom NodePort for the HTTPS port. Requires controller.service.type set to NodePort.
+              nodePort: 30443
+              ## The HTTPS port on the POD where the Ingress Controller service is running.
+              targetPort: 443
+

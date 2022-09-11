@@ -35,3 +35,6 @@ projects:
    destinations:
    - namespace: infra
      server: https://kubernetes.default.svc
+   clusterResourceWhitelist: # For cluster wide resources.
+   - group: "*"
+     kind: "*"

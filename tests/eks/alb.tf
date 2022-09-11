@@ -4,7 +4,8 @@ resource "aws_lb" "eks" {
   load_balancer_type = "application"
   subnets            = module.vpc.public_subnets
   security_groups = [
-    aws_security_group.alb.id
+    aws_security_group.alb.id,
+    module.eks.node_security_group_id
   ]
 }
 
@@ -39,17 +40,24 @@ resource "aws_lb_listener_rule" "argo" {
 }
 
 resource "aws_lb_target_group" "alb_argo" {
-  name        = local.alb.target_group.argo
-  port        = 80
+  name        = "${local.alb.target_group.argo}-${substr(uuid(), 0, 4)}"
+  port        = 30080
   protocol    = "HTTP"
-  target_type = "ip"
+  target_type = "instance"
   vpc_id      = module.vpc.vpc_id
   health_check {
-    port     = 80
+    port     = 30080
     protocol = "HTTP"
-    timeout  = 5
-    interval = 10
-    path     = "/healthz"
+    timeout  = 2
+    interval = 5
+    path     = "/nginx-health"
+  }
+
+  lifecycle {
+    create_before_destroy = true
+    ignore_changes = [
+      name
+    ]
   }
 }
 
@@ -94,4 +102,9 @@ resource "aws_route53_record" "alb" {
     zone_id                = aws_lb.eks.zone_id
     evaluate_target_health = true
   }
+}
+
+resource "aws_autoscaling_attachment" "asg_attachment_bar" {
+  autoscaling_group_name = module.eks.eks_managed_node_groups["one"].node_group_autoscaling_group_names[0]
+  lb_target_group_arn    = aws_lb_target_group.alb_argo.arn
 }
