@@ -1,3 +1,10 @@
+crds:
+  # Install and upgrade CRDs. default is true
+  install: true
+  # Keep CRDs on chart uninstall. default is false
+  keep: false
+
+
 redis-ha:
   enabled: true
 

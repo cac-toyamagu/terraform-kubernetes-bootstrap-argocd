@@ -29,7 +29,7 @@ jobs:
 
       - name: Terraform plan
         id: plan
-        run: terraform plan -no-color
+        run: terraform plan -no-color -var="argocd_apps_target_revision=${{ github.event.pull_request.head.ref }}"
         working-directory: ./tests/kind
       
       - name: Terraform apply

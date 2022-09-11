@@ -7,29 +7,29 @@ resource "helm_release" "argocd" {
   version    = local.argocd.helm_version
   values     = local.argocd.helm_values
 
-  create_namespace = local.helm_config.create_namespace
-  timeout          = local.helm_config.timeout
-}
-
-resource "helm_release" "argocd_apps" {
-  name = local.argocd_apps.name
-
-  repository = local.argocd_apps.helm_repo
-  chart      = local.argocd_apps.helm_chart
-  namespace  = local.argocd_apps.namespace
-  values     = local.argocd_apps.helm_values
-  #version    = local.argocd_apps.helm_version
-
-  create_namespace = local.helm_config.create_namespace
-  timeout          = local.helm_config.timeout
+  timeout = local.helm_config.timeout
 
   depends_on = [
-    helm_release.argocd
+    kubernetes_namespace.this
   ]
 }
 
-
-
+//resource "helm_release" "argocd_apps" {
+//  name = local.argocd_apps.name
+//
+//  repository = local.argocd_apps.helm_repo
+//  chart      = local.argocd_apps.helm_chart
+//  namespace  = local.argocd_apps.namespace
+//  values     = local.argocd_apps.helm_values
+//  #version    = local.argocd_apps.helm_version
+//
+//  timeout = local.helm_config.timeout
+//
+//  depends_on = [
+//    helm_release.argocd,
+//    kubernetes_namespace.this
+//  ]
+//}
 
 resource "kubernetes_secret" "argocd_git_token" {
   for_each = { for k, v in var.git_tokens : k => v }
@@ -69,4 +69,11 @@ resource "kubernetes_secret" "argocd_sso_credentials" {
   depends_on = [
     helm_release.argocd
   ]
+}
+
+resource "kubernetes_namespace" "this" {
+  count = try(local.helm_config.create_namespace, true) && local.argocd.namespace != "kube-system" ? 1 : 0
+  metadata {
+    name = var.argocd_namespace
+  }
 }
