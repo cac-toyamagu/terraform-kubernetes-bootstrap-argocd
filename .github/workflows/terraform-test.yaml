@@ -1,0 +1,46 @@
+name: "Test module by kind cluster"
+on: [pull_request]
+jobs:
+  terraform-ci-test:
+    name: terraform-ci-test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./tests/kind
+
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Setup kind
+        uses: helm/kind-action@v1.3.0
+        with:
+          install_only: true
+      
+      - name: Terraform init
+        id: init
+        run: terraform init
+
+      - name: Terraform plan
+        id: plan
+        run: terraform plan -no-color
+        working-directory: ./tests/kind
+      
+      - name: Terraform apply
+        run: terraform apply -auto-approve -input=false
+      
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+        id: install
+      
+      - name: Port forward to ArgoCD
+        run: kubectl port-forward -n argocd svc/argocd-server 8080:80 &
+      
+      - name: Curl to ArgoCD
+        run: curl localhost:8080

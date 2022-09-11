@@ -1,0 +1,34 @@
+# Application Name
+name: ""
+
+# The ArgoCD Project the Application belongs to.
+project: "default"
+
+namespace: "argocd"
+
+# Source config for the Application
+source:
+
+  # Git Repo the Application points to.
+  repoUrl: ""
+
+  # Target revision for the repo.
+  targetRevision: "HEAD"
+
+  # Path in the repo Argo should look for manifests.
+  path: ""
+
+  # Helm configuration.
+  helm :
+    values: ""
+
+syncPolicy:
+  retry:
+    backoff:
+      duration: "10s"
+      factor: 2
+      maxDuration: "3m"
+
+# Destination cluster.
+destination:
+  server: "https://kubernetes.default.svc"
