@@ -22,7 +22,7 @@ locals {
   argocd_applications_vars = {
     repo_url        = var.argocd_apps_repo
     target_revision = var.argocd_apps_target_revision
-    path            = "tests/kind/argocd/app"
+    path            = "tests/eks/argocd/"
   }
   argocd_applications = [
     templatefile("${path.module}/argocd/apps/applications.yaml.tftpl", local.argocd_applications_vars)
@@ -55,8 +55,9 @@ locals {
   )
 
   alb_public_record = format(
-    "%s",
-    local.name_common
+    "%s.%s",
+    "argocd",
+    var.public_root_domain
   )
 
   alb_target_group_argo = format(

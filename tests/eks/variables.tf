@@ -20,7 +20,7 @@ variable "aws_default_tags" {
   description = "AWS default tags"
   type        = map(string)
   default = {
-    Creator = "toyamagu"
+    Creator = "eks-cluster-with-argo"
   }
 }
 
@@ -58,5 +58,5 @@ variable "source_cidrs" {
 variable "public_root_domain" {
   description = "Public root domain"
   type        = string
-  default     = "example.com"
+  default     = "anderson-dirac.com"
 }

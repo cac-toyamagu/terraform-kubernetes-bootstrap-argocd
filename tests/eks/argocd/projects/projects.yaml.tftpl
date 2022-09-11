@@ -23,3 +23,15 @@ projects:
    destinations:
    - namespace: argocd-apps
      server: https://kubernetes.default.svc
+ - name: infra
+   namespace: argocd
+   additionalLabels: {}
+   additionalAnnotations: {}
+   finalizers:
+   - resources-finalizer.argocd.argoproj.io
+   description: Infra
+   sourceRepos:
+   - '*'
+   destinations:
+   - namespace: infra
+     server: https://kubernetes.default.svc
