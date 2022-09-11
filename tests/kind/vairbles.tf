@@ -31,11 +31,11 @@ variable "client_id" {
 variable "argocd_apps_repo" {
   description = "Argocd apps repository."
   type        = string
-  default     = "https://github.com/cac-toyamagu/terraform-bootstrap-argocd.git"
+  default     = "https://github.com/cac-toyamagu/terraform-kubernetes-bootstrap-argocd.git"
 }
 
 variable "argocd_apps_target_revision" {
   description = "Argocd apps target revision."
   type        = string
-  default     = "feature/argocd-applications"
+  default     = "main"
 }

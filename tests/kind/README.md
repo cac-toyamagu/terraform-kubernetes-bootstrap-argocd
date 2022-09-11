@@ -14,7 +14,7 @@
 
 - Create a github sso secrets.
   - ![create oauth application](./figs/create-github-oauth-application.png)
-- Write `clientId` and `clientSecret` into `env.tfvars`
+- Write `clientId` and `clientSecret` into `terraform.tfvars`. **DONT' push it to GitHub**.
 
   ```bash
   cat > terraform.tfvars <<EOF

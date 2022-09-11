@@ -29,11 +29,11 @@ jobs:
 
       - name: Terraform plan
         id: plan
-        run: terraform plan -no-color
+        run: terraform plan -no-color -var="argocd_apps_target_revision=${{ github.event.pull_request.head.ref }}"
         working-directory: ./tests/kind
       
       - name: Terraform apply
-        run: terraform apply -auto-approve -input=false
+        run: terraform apply -auto-approve -input=false -var="argocd_apps_target_revision=${{ github.event.pull_request.head.ref }}"
       
       - name: Setup kubectl
         uses: azure/setup-kubectl@v3
@@ -44,3 +44,9 @@ jobs:
       
       - name: Curl to ArgoCD
         run: curl localhost:8080
+
+      - name: Get pods in argocd-apps namespace
+        run: kubectl get po -n argocd-apps
+
+      - name: Terraform destroy
+        run: terraform destroy -auto-approve

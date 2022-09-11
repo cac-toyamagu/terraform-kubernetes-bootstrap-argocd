@@ -38,7 +38,7 @@ module "argocd" {
       proxy    = ""
     },
     {
-      url      = "https://github.com/cac-toyamagu/terraform-bootstrap-argocd.git"
+      url      = var.argocd_apps_repo
       username = ""
       password = ""
       proxy    = ""
@@ -56,7 +56,8 @@ module "argocd" {
   argocd_applications = local.argocd_applications
   argocd_projects     = local.argocd_projects
   depends_on = [
-    kubernetes_namespace.argocd_apps
+    kubernetes_namespace.argocd_apps,
+    kind_cluster.this
   ]
 }
 
@@ -64,4 +65,8 @@ resource "kubernetes_namespace" "argocd_apps" {
   metadata {
     name = "argocd-apps"
   }
+
+  depends_on = [
+    kind_cluster.this
+  ]
 }
