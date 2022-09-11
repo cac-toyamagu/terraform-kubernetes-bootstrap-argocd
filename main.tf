@@ -14,22 +14,22 @@ resource "helm_release" "argocd" {
   ]
 }
 
-//resource "helm_release" "argocd_apps" {
-//  name = local.argocd_apps.name
-//
-//  repository = local.argocd_apps.helm_repo
-//  chart      = local.argocd_apps.helm_chart
-//  namespace  = local.argocd_apps.namespace
-//  values     = local.argocd_apps.helm_values
-//  #version    = local.argocd_apps.helm_version
-//
-//  timeout = local.helm_config.timeout
-//
-//  depends_on = [
-//    helm_release.argocd,
-//    kubernetes_namespace.this
-//  ]
-//}
+resource "helm_release" "argocd_apps" {
+  name = local.argocd_apps.name
+
+  repository = local.argocd_apps.helm_repo
+  chart      = local.argocd_apps.helm_chart
+  namespace  = local.argocd_apps.namespace
+  values     = local.argocd_apps.helm_values
+  #version    = local.argocd_apps.helm_version
+
+  timeout = local.helm_config.timeout
+
+  depends_on = [
+    helm_release.argocd,
+    kubernetes_namespace.this
+  ]
+}
 
 resource "kubernetes_secret" "argocd_git_token" {
   for_each = { for k, v in var.git_tokens : k => v }
