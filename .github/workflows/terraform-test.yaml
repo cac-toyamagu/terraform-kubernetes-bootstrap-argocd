@@ -44,3 +44,9 @@ jobs:
       
       - name: Curl to ArgoCD
         run: curl localhost:8080
+
+      - name: Get pods in argocd-apps namespace
+        run: kubectl get po -n argocd-apps
+
+      - name: Terraform destroy
+        run: terraform destroy -auto-approve
