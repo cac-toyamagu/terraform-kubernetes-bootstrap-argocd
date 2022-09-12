@@ -73,3 +73,16 @@ locals {
     }
   }
 }
+
+// SSO
+locals {
+  // Secrets Manager
+  aws_sm_sso = {
+    name = "${var.eks_cluster_name}-sso"
+    values = {
+      client_id     = try(var.sso_client_id, null)
+      client_secret = try(var.sso_client_id, null)
+    }
+    is_set = (local.aws_sm_sso.values.client_id != null && local.aws_sm_sso.values.client_secret != null ? true : false)
+  }
+}

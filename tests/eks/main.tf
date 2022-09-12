@@ -76,10 +76,10 @@ module "argocd" {
   argocd_helm_values = local.helm_values
   sso_credentials = [
     {
-      secretname = "test-sso-secret"
+      secretname = local.aws_sm_sso.name
       data = {
-        clientId     = var.client_id
-        clientSecret = var.client_secret
+        clientId     = jsondecode(data.aws_secretsmanager_secret_version.sso.secret_string)["client_id"]
+        clientSecret = jsondecode(data.aws_secretsmanager_secret_version.sso.secret_string)["client_secret"]
       }
     }
   ]
@@ -110,4 +110,20 @@ resource "kubernetes_namespace" "infra" {
   depends_on = [
     module.eks
   ]
+}
+
+resource "aws_secretsmanager_secret" "sso" {
+  name = local.aws_sm_sso.name
+}
+
+resource "aws_secretsmanager_secret_version" "sso" {
+  secret_id     = aws_secretsmanager_secret.sso.id
+  secret_string = jsonencode(local.aws_sm_sso.values)
+
+  # If sso secrets are privided, update secret version.
+  ignore_changes = local.aws_sm_sso.is_set ? [] : [secret_string]
+}
+
+data "aws_secretsmanager_secret_version" "name" {
+  secret_id = aws_secretsmanager_secret.sso.id
 }
