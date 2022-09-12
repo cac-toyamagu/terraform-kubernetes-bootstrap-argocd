@@ -15,4 +15,4 @@ spec:
   source:
     repoURL: https://github.com/cac-toyamagu/terraform-kubernetes-bootstrap-argocd.git
     targetRevision: feature/test-eks
-    path: tests/eks/argocd/infra
+    path: tests/eks/argocd/infra/virtualServers
