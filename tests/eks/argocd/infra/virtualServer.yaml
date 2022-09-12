@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: virtualServer
+  name: virtual-server
 spec:
   destination:
     name: ''
