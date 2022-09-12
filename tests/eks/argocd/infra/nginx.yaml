@@ -8,6 +8,10 @@ spec:
     namespace: infra
     server: 'https://kubernetes.default.svc'
   project: infra
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
   source:
     path: ''
     repoURL: 'https://helm.nginx.com/stable'

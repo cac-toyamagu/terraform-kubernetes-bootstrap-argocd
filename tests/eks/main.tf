@@ -116,11 +116,6 @@ resource "aws_secretsmanager_secret" "sso" {
   name = local.aws_sm_sso.name
 }
 
-resource "aws_secretsmanager_secret_version" "sso" {
-  secret_id     = aws_secretsmanager_secret.sso.id
-  secret_string = jsonencode(local.aws_sm_sso.values)
-}
-
 data "aws_secretsmanager_secret_version" "sso" {
   secret_id = aws_secretsmanager_secret.sso.id
 }

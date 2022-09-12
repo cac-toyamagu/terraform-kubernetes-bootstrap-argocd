@@ -79,7 +79,7 @@ locals {
   // Secrets Manager
 
   client_id     = try(var.sso_client_id, null)
-  client_secret = try(var.sso_client_id, null)
+  client_secret = try(var.sso_client_secret, null)
 
   aws_sm_sso = {
 
