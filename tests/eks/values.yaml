@@ -21,8 +21,8 @@ server:
           id: github
           name: GitHub
           config:
-            clientID: $test-sso-secret:clientId
-            clientSecret: $test-sso-secret:clientSecret
+            clientID: $eks-cluster-with-argo-sso:clientId
+            clientSecret: $eks-cluster-with-argo-sso:clientSecret
           orgs:
           - name: test-org
   rbacConfig:

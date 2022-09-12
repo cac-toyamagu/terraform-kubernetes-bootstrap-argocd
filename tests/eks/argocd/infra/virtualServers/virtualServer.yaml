@@ -1,0 +1,10 @@
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer         # 作成するオブジェクトとしてVirtualServerを指定
+metadata:
+  name: argocd
+  namespace: infra         # cafe VirtualServerをcafe namespaceに作成
+spec:
+  host: argocd.anderson-dirac.com
+  routes:
+  - path: /
+    route: argocd/argocd

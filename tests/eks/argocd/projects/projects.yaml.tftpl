@@ -29,11 +29,13 @@ projects:
    additionalAnnotations: {}
    finalizers:
    - resources-finalizer.argocd.argoproj.io
-   description: Infra
+   description: Infra resources
    sourceRepos:
    - '*'
    destinations:
    - namespace: infra
+     server: https://kubernetes.default.svc
+   - namespace: argocd
      server: https://kubernetes.default.svc
    clusterResourceWhitelist: # For cluster wide resources.
    - group: "*"

@@ -1,10 +1,18 @@
-apiVersion: k8s.nginx.org/v1
-kind: VirtualServer         # 作成するオブジェクトとしてVirtualServerを指定
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
-  name: argocd
-  namespace: infra         # cafe VirtualServerをcafe　namespaceに作成
+  name: nginx
 spec:
-  host: argocd.anderson-dirac.com
-  routes:
-  - path: /
-    route: argocd/argocd
+  destination:
+    name: ''
+    namespace: infra
+    server: 'https://kubernetes.default.svc'
+  project: infra
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    repoURL: https://github.com/cac-toyamagu/terraform-kubernetes-bootstrap-argocd.git
+    targetRevision: feature/test-eks
+    path: tests/eks/argocd/infra

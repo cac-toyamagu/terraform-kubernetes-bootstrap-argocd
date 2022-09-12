@@ -11,7 +11,7 @@ applications:
      targetRevision: ${target_revision}
      path: ${path}/apps
      directory:
-       recurse: true
+       recurse: false
    destination:
      server: https://kubernetes.default.svc
      namespace: argocd # must match the namespace of your ArgoCD instance
@@ -30,13 +30,13 @@ applications:
    additionalAnnotations: {}
    finalizers:
    - resources-finalizer.argocd.argoproj.io
-   project: infra
+   project: apps
    source:
      repoURL: ${repo_url}
      targetRevision: ${target_revision}
      path: ${path}/infra
      directory:
-       recurse: true
+       recurse: false
    destination:
      server: https://kubernetes.default.svc
      namespace: argocd # must match the namespace of your ArgoCD instance

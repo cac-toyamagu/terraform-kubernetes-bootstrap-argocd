@@ -82,7 +82,6 @@ locals {
   client_secret = try(var.sso_client_secret, null)
 
   aws_sm_sso = {
-
     name = "${var.eks_cluster_name}-sso"
     values = {
       client_id     = local.client_id
