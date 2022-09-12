@@ -119,11 +119,8 @@ resource "aws_secretsmanager_secret" "sso" {
 resource "aws_secretsmanager_secret_version" "sso" {
   secret_id     = aws_secretsmanager_secret.sso.id
   secret_string = jsonencode(local.aws_sm_sso.values)
-
-  # If sso secrets are privided, update secret version.
-  ignore_changes = local.aws_sm_sso.is_set ? [] : [secret_string]
 }
 
-data "aws_secretsmanager_secret_version" "name" {
+data "aws_secretsmanager_secret_version" "sso" {
   secret_id = aws_secretsmanager_secret.sso.id
 }

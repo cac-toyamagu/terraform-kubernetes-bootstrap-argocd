@@ -77,12 +77,17 @@ locals {
 // SSO
 locals {
   // Secrets Manager
+
+  client_id     = try(var.sso_client_id, null)
+  client_secret = try(var.sso_client_id, null)
+
   aws_sm_sso = {
+
     name = "${var.eks_cluster_name}-sso"
     values = {
-      client_id     = try(var.sso_client_id, null)
-      client_secret = try(var.sso_client_id, null)
+      client_id     = local.client_id
+      client_secret = local.client_secret
     }
-    is_set = (local.aws_sm_sso.values.client_id != null && local.aws_sm_sso.values.client_secret != null ? true : false)
+    is_set = (local.client_id != null && local.client_secret != null ? true : false)
   }
 }
