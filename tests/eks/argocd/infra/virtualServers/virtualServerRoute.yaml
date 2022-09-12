@@ -1,8 +1,8 @@
 apiVersion: k8s.nginx.org/v1
-kind: VirtualServerRoute     # 作成するオブジェクトとしてVirtualServerRouteを指定
+kind: VirtualServerRoute
 metadata:
   name: argocd
-  namespace: argocd           # tea VirtualServerRouteをtea namespaceに作成
+  namespace: argocd
 spec:
   host: argocd.anderson-dirac.com
   upstreams:

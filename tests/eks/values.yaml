@@ -13,7 +13,8 @@ server:
     - --insecure
 
   config:
-    url: "http://localhost:8080"
+    #url: "http://localhost:8080"
+    url: "https://argocd.anderson-dirac.com"
     dex.config: |
       connectors:
         # GitHub example
