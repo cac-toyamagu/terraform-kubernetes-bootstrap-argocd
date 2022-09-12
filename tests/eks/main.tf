@@ -124,3 +124,24 @@ resource "aws_secretsmanager_secret_version" "sso" {
 data "aws_secretsmanager_secret_version" "sso" {
   secret_id = aws_secretsmanager_secret.sso.id
 }
+
+resource "null_resource" "register_secret" {
+  count = local.aws_sm_sso.is_set ? 1 : 0
+  triggers = {
+    client_secret                 = local.aws_sm_sso.values.client_secret
+    client_id                     = local.aws_sm_sso.values.client_id
+    secretsmanager_secret_version = data.aws_secretsmanager_secret_version.sso.secret_string
+  }
+  provisioner "local-exec" {
+    environment = {
+      CLIENT_ID     = self.triggers.client_id
+      CLIENT_SECRET = self.triggers.client_secret
+      SECRET_ID     = aws_secretsmanager_secret.sso.arn
+    }
+    command     = "${path.cwd}/scripts/register_secret.sh"
+    interpreter = ["bash"]
+  }
+  depends_on = [
+    aws_secretsmanager_secret.sso
+  ]
+}
