@@ -4,7 +4,6 @@ metadata:
   name: nginx
 spec:
   destination:
-    name: ''
     namespace: infra
     server: 'https://kubernetes.default.svc'
   project: infra
