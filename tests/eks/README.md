@@ -8,4 +8,4 @@
     1. Create tfvars: `cp example.tfvars example.auto.tfvars`
     1. Set `TF_VAR` environment variables
 1. Terraform init: `terraform init -backend-config backend.hcl`
-1. Terraform apply: `terraform apply:
+1. Terraform apply: `terraform apply`

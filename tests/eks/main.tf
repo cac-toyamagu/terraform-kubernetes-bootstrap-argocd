@@ -146,6 +146,7 @@ resource "aws_ssm_parameter" "client_secret" {
   }
 }
 
+# If sso_credentials are set, exec script which register sso credentials to SSM parameter store.
 resource "null_resource" "register_secret" {
   count = local.sso_credentials.is_set ? 1 : 0
   triggers = {
