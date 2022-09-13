@@ -74,6 +74,10 @@ module "eks" {
       type                          = "ingress"
     }
   }
+
+  depends_on = [
+    module.vpc
+  ]
 }
 
 module "argocd" {
