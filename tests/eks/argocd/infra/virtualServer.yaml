@@ -15,14 +15,14 @@ spec:
     repoURL: https://github.com/cac-toyamagu/terraform-kubernetes-bootstrap-argocd.git
     targetRevision: feature/test-eks
     path: tests/eks/helm/virtual-server
-  helm:
-    values: |
-      host: "argocd.anderson-dirac.com"
-      name: "argocd"
+    helm:
+      values: |
+        host: "argocd.anderson-dirac.com"
+        name: "argocd"
 
-      virtualServer: 
-        namespace: "infra"
+        virtualServer: 
+          namespace: "infra"
 
-      virtualServerRoute: 
-        namespace: "argocd"
-        service: "argocd-service"
+        virtualServerRoute: 
+          namespace: "argocd"
+          service: "argocd-service"
