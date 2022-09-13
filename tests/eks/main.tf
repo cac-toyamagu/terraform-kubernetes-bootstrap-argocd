@@ -83,8 +83,8 @@ module "argocd" {
     {
       secretname = local.aws_sm_sso.name
       data = {
-        clientId     = data.a
-        clientSecret = jsondecode(data.aws_secretsmanager_secret_version.sso.secret_string)["client_secret"]
+        clientId     = local.aws_sm_sso.values.client_id
+        clientSecret = local.aws_sm_sso.values.client_secret
       }
     }
   ]
@@ -118,13 +118,13 @@ resource "kubernetes_namespace" "infra" {
   ]
 }
 
-resource "aws_ssm_parameter" "client_id" {
-  name        = "/database/password/master"
-  description = "The parameter description"
-  type        = "SecureString"
-  value       = var.database_master_password
+# resource "aws_ssm_parameter" "client_id" {
+#   name        = "/database/password/master"
+#   description = "The parameter description"
+#   type        = "SecureString"
+#   value       = var.database_master_password
 
-  tags = {
-    environment = "production"
-  }
-}
+#   tags = {
+#     environment = "production"
+#   }
+# }
