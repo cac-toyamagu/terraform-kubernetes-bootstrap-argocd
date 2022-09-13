@@ -81,7 +81,7 @@ locals {
   client_id     = try(var.sso_client_id, null)
   client_secret = try(var.sso_client_secret, null)
 
-  aws_sm_sso = {
+  sso_credentials = {
     name = "${var.eks_cluster_name}-sso"
     values = {
       client_id     = local.client_id

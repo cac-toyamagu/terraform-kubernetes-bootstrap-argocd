@@ -81,10 +81,10 @@ module "argocd" {
   argocd_helm_values = local.helm_values
   sso_credentials = [
     {
-      secretname = local.aws_sm_sso.name
+      secretname = local.sso_credentials.name
       data = {
-        clientId     = local.aws_sm_sso.values.client_id
-        clientSecret = local.aws_sm_sso.values.client_secret
+        clientId     = data.aws_ssm_parameter.client_id.value
+        clientSecret = data.aws_ssm_parameter.client_secret.value
       }
     }
   ]
@@ -93,7 +93,8 @@ module "argocd" {
   depends_on = [
     kubernetes_namespace.argocd_apps,
     kubernetes_namespace.infra,
-    module.eks
+    module.eks,
+    null_resource.register_secret
   ]
 }
 
@@ -118,13 +119,54 @@ resource "kubernetes_namespace" "infra" {
   ]
 }
 
-# resource "aws_ssm_parameter" "client_id" {
-#   name        = "/database/password/master"
-#   description = "The parameter description"
-#   type        = "SecureString"
-#   value       = var.database_master_password
+resource "aws_ssm_parameter" "client_id" {
+  name        = "/${local.sso_credentials.name}/client_id"
+  description = "SSO client id"
+  type        = "SecureString"
+  value       = "client_id"
 
-#   tags = {
-#     environment = "production"
-#   }
-# }
+  lifecycle {
+    ignore_changes = [
+      value
+    ]
+  }
+}
+
+
+resource "aws_ssm_parameter" "client_secret" {
+  name        = "/${local.sso_credentials.name}/client_secret"
+  description = "SSO client secret"
+  type        = "SecureString"
+  value       = "client_secret"
+
+  lifecycle {
+    ignore_changes = [
+      value
+    ]
+  }
+}
+
+resource "null_resource" "register_secret" {
+  count = local.sso_credentials.is_set ? 1 : 0
+  triggers = {
+    run_always = "${timestamp()}"
+  }
+  provisioner "local-exec" {
+    environment = {
+      CLIENT_ID          = local.sso_credentials.values.client_id
+      CLIENT_SECRET      = local.sso_credentials.values.client_secret
+      CLIENT_ID_NAME     = aws_ssm_parameter.client_id.name
+      CLIENT_SECRET_NAME = aws_ssm_parameter.client_secret.name
+    }
+    command     = "${path.cwd}/scripts/register_aws_ssm_pms.sh"
+    interpreter = ["bash"]
+  }
+}
+
+data "aws_ssm_parameter" "client_id" {
+  name = aws_ssm_parameter.client_id.name
+}
+
+data "aws_ssm_parameter" "client_secret" {
+  name = aws_ssm_parameter.client_secret.name
+}
