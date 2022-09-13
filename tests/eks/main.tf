@@ -20,13 +20,15 @@ module "vpc" {
 
 # STEP 2: Create EKS cluster 
 module "eks" {
-  source                    = "terraform-aws-modules/eks/aws"
-  version                   = "18.29.0"
-  cluster_name              = local.eks.cluster_name
-  cluster_version           = var.eks_version
-  subnet_ids                = module.vpc.private_subnets
-  vpc_id                    = module.vpc.vpc_id
-  cluster_enabled_log_types = ["audit", "api", "authenticator", "controllerManager", "scheduler"]
+  source                          = "terraform-aws-modules/eks/aws"
+  version                         = "18.29.0"
+  cluster_name                    = local.eks.cluster_name
+  cluster_version                 = var.eks_version
+  cluster_endpoint_private_access = true
+  cluster_endpoint_public_access  = true
+  subnet_ids                      = module.vpc.private_subnets
+  vpc_id                          = module.vpc.vpc_id
+  cluster_enabled_log_types       = ["audit", "api", "authenticator", "controllerManager", "scheduler"]
 
   eks_managed_node_group_defaults = {
     ami_type       = "AL2_x86_64"
@@ -74,10 +76,6 @@ module "eks" {
       type                          = "ingress"
     }
   }
-
-  depends_on = [
-    module.vpc
-  ]
 }
 
 module "argocd" {
