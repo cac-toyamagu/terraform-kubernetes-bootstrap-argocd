@@ -2,4 +2,10 @@
 
 ## Usage
 
-1. `terraform init -backend-config backend.hcl`
+1. Create backend setting file.
+    - `cp example.backend.hcl backend.hcl`
+1. Set terraform var. One can choose options:
+    1. Create tfvars: `cp example.tfvars example.auto.tfvars`
+    1. Set `TF_VAR` environment variables
+1. Terraform init: `terraform init -backend-config backend.hcl`
+1. Terraform apply: `terraform apply:
