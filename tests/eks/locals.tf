@@ -90,3 +90,11 @@ locals {
     is_set = (local.client_id != null && local.client_secret != null ? true : false)
   }
 }
+
+// backend
+
+locals {
+  backend_s3 = {
+
+  }
+}

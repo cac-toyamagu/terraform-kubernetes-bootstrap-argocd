@@ -1,0 +1,6 @@
+apiVersion: v2
+name: nginx-virtual-server
+description: A Helm chart that installs a Nginx virtualServer and virtualServerRoute.
+type: application
+version: 0.1.0
+appVersion: 0.1.0

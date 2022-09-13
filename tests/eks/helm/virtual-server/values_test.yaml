@@ -1,0 +1,9 @@
+host: "dnsname.com"
+name: "test"
+
+virtualServer: 
+  namespace: "vs-ns"
+
+virtualServerRoute: 
+  namespace: "vsr-ns"
+  service: "target-service"

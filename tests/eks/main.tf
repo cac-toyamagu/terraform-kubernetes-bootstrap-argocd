@@ -1,3 +1,8 @@
+terraform {
+  backend "s3" {
+  }
+}
+
 module "vpc" {
   source                = "terraform-aws-modules/vpc/aws"
   version               = "3.14.4"
@@ -78,7 +83,7 @@ module "argocd" {
     {
       secretname = local.aws_sm_sso.name
       data = {
-        clientId     = jsondecode(data.aws_secretsmanager_secret_version.sso.secret_string)["client_id"]
+        clientId     = data.a
         clientSecret = jsondecode(data.aws_secretsmanager_secret_version.sso.secret_string)["client_secret"]
       }
     }
@@ -113,29 +118,13 @@ resource "kubernetes_namespace" "infra" {
   ]
 }
 
-resource "aws_secretsmanager_secret" "sso" {
-  name = local.aws_sm_sso.name
-}
+resource "aws_ssm_parameter" "client_id" {
+  name        = "/database/password/master"
+  description = "The parameter description"
+  type        = "SecureString"
+  value       = var.database_master_password
 
-data "aws_secretsmanager_secret_version" "sso" {
-  secret_id = aws_secretsmanager_secret.sso.id
-}
-
-resource "null_resource" "register_secret" {
-  count = local.aws_sm_sso.is_set ? 1 : 0
-  triggers = {
-    sso_secret_string = data.aws_secretsmanager_secret_version.sso.secret_string
+  tags = {
+    environment = "production"
   }
-  provisioner "local-exec" {
-    environment = {
-      CLIENT_ID     = local.aws_sm_sso.values.client_id
-      CLIENT_SECRET = local.aws_sm_sso.values.client_secret
-      SECRET_ID     = aws_secretsmanager_secret.sso.arn
-    }
-    command     = "${path.cwd}/scripts/register_secret.sh"
-    interpreter = ["bash"]
-  }
-  depends_on = [
-    aws_secretsmanager_secret.sso
-  ]
 }

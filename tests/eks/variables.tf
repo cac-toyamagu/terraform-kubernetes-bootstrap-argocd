@@ -63,9 +63,11 @@ variable "public_root_domain" {
 variable "sso_client_id" {
   description = "sso client id"
   type        = string
+  default     = null
 }
 
 variable "sso_client_secret" {
   description = "sso client secret"
   type        = string
+  default     = null
 }

@@ -1,0 +1,10 @@
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServer
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.virtualServer.namespace }}
+spec:
+  host: {{ .Values.host }}
+  routes:
+  - path: /
+    route: {{ printf "%s/%s" .Values.virtualServerRoute.namespace .Values.name }}
