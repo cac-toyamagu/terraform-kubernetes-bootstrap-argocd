@@ -25,4 +25,4 @@ spec:
 
         virtualServerRoute: 
           namespace: "argocd"
-          service: "argocd-service"
+          service: "argocd-server"
