@@ -1,1 +1,5 @@
 host: ""
+virtualServer:
+  repoURL: ""
+  targetRevision: ""
+  path: ""

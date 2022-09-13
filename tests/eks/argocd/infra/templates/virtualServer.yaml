@@ -12,9 +12,9 @@ spec:
       prune: true
       selfHeal: true
   source:
-    repoURL: https://github.com/cac-toyamagu/terraform-kubernetes-bootstrap-argocd.git
-    targetRevision: feature/test-eks
-    path: tests/eks/helm/virtual-server
+    repoURL: {{ .Values.virtualServer.repoURL }}
+    targetRevision: {{ .Values.virtualServer.targetRevision }}
+    path: {{ .Values.virtualServer.path }}
     helm:
       values: |
         host: {{ .Values.host }}

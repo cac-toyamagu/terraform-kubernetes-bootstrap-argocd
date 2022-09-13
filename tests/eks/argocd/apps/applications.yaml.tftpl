@@ -9,7 +9,7 @@ applications:
    source:
      repoURL: ${repo_url}
      targetRevision: ${target_revision}
-     path: ${path}/apps
+     path: ${path}/argocd/app
      directory:
        recurse: false
    destination:
@@ -34,12 +34,17 @@ applications:
    source:
      repoURL: ${repo_url}
      targetRevision: ${target_revision}
-     path: ${path}/infra
+     path: ${path}/argocd/infra
      directory:
        recurse: false
      helm:
        values: |
-         host: "example.com"
+          host: ${host}
+
+          virtualServer:
+            repoURL: ${repo_url}
+            targetRevision: ${target_revision}
+            path: ${path}/helm/virtual-server
    destination:
      server: https://kubernetes.default.svc
      namespace: argocd # must match the namespace of your ArgoCD instance
