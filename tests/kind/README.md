@@ -22,3 +22,6 @@
   client_secret="<clientSecret>"
   EOF
   ```
+
+<!-- BEGIN_TF_DOCS -->
+<!-- END_TF_DOCS -->
