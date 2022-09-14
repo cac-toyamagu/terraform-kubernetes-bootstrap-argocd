@@ -83,3 +83,9 @@ variable "argocd_projects" {
   type        = list(string)
   default     = []
 }
+
+variable "argocd_apps_helm_version" {
+  description = "ArgoCD apps helm version"
+  type        = string
+  default     = "0.0.1"
+}
