@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: virtual-server
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: infra
+    server: 'https://kubernetes.default.svc'
+  project: infra
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    repoURL: {{ .Values.virtualServer.repoURL }}
+    targetRevision: {{ .Values.virtualServer.targetRevision }}
+    path: {{ .Values.virtualServer.path }}
+    helm:
+      values: |
+        host: {{ .Values.host }}
+        name: "argocd"
+
+        virtualServer: 
+          namespace: "infra"
+
+        virtualServerRoute: 
+          namespace: "argocd"
+          service: "argocd-server"

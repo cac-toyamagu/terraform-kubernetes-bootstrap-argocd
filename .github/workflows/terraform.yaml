@@ -11,12 +11,13 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
+
       - name: tfsec
         uses: reviewdog/action-tfsec@master
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
-          working_directory: .
+          working_directory: ./
           level: info
           
       - name: Setup terraform
@@ -24,13 +25,14 @@ jobs:
       
       - name: Terraform fmt
         id: fmt
-        run: terraform fmt -check
+        run: terraform fmt -check -recursive
         continue-on-error: true
+        working-directory: ./
 
       - name: Render terraform docs and push changes back to PR
         uses: terraform-docs/gh-actions@v1.0.0
         with:
-          working-dir: .
+          working-dir: .,./tests/eks,tests/kind
           output-file: README.md
           output-method: inject
           git-push: "true"

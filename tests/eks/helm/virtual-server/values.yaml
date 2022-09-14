@@ -1,0 +1,9 @@
+host: ""
+name: ""
+
+virtualServer: 
+  namespace: ""
+
+virtualServerRoute: 
+  namespace: ""
+  service: ""

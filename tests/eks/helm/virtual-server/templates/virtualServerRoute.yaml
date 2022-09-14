@@ -1,0 +1,15 @@
+apiVersion: k8s.nginx.org/v1
+kind: VirtualServerRoute
+metadata:
+  name: {{ .Values.name }}
+  namespace: {{ .Values.virtualServerRoute.namespace }}
+spec:
+  host: {{ .Values.host }}
+  upstreams:
+  - name: {{ .Values.name }}
+    service: {{ .Values.virtualServerRoute.service }}
+    port: 80
+  subroutes:
+  - path: /
+    action:
+      pass: {{ .Values.name }}

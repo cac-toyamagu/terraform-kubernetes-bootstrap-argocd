@@ -1,0 +1,42 @@
+projects:
+ - name: apps
+   namespace: argocd
+   additionalLabels: {}
+   additionalAnnotations: {}
+   finalizers:
+   - resources-finalizer.argocd.argoproj.io
+   description: Apps project
+   sourceRepos:
+   - '*'
+   destinations:
+   - namespace: argocd
+     server: https://kubernetes.default.svc
+ - name: argocd-apps
+   namespace: argocd
+   additionalLabels: {}
+   additionalAnnotations: {}
+   finalizers:
+   - resources-finalizer.argocd.argoproj.io
+   description: Child applications project
+   sourceRepos:
+   - '*'
+   destinations:
+   - namespace: argocd-apps
+     server: https://kubernetes.default.svc
+ - name: infra
+   namespace: argocd
+   additionalLabels: {}
+   additionalAnnotations: {}
+   finalizers:
+   - resources-finalizer.argocd.argoproj.io
+   description: Infra resources
+   sourceRepos:
+   - '*'
+   destinations:
+   - namespace: infra
+     server: https://kubernetes.default.svc
+   - namespace: argocd
+     server: https://kubernetes.default.svc
+   clusterResourceWhitelist: # For cluster wide resources.
+   - group: "*"
+     kind: "*"
