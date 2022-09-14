@@ -38,6 +38,7 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_argocd_applications"></a> [argocd\_applications](#input\_argocd\_applications) | ArgoCD applications | `list(string)` | `[]` | no |
 | <a name="input_argocd_apps_helm_chart"></a> [argocd\_apps\_helm\_chart](#input\_argocd\_apps\_helm\_chart) | ArgoCD helm chart name | `string` | `"argocd-apps"` | no |
+| <a name="input_argocd_apps_helm_version"></a> [argocd\_apps\_helm\_version](#input\_argocd\_apps\_helm\_version) | ArgoCD apps helm version | `string` | `"0.0.1"` | no |
 | <a name="input_argocd_apps_name"></a> [argocd\_apps\_name](#input\_argocd\_apps\_name) | ArgoCD apps name | `string` | `"argocd-apps"` | no |
 | <a name="input_argocd_helm_chart"></a> [argocd\_helm\_chart](#input\_argocd\_helm\_chart) | ArgoCD helm chart name | `string` | `"argo-cd"` | no |
 | <a name="input_argocd_helm_repo"></a> [argocd\_helm\_repo](#input\_argocd\_helm\_repo) | ArgoCD helm repository URL | `string` | `"https://argoproj.github.io/argo-helm"` | no |
