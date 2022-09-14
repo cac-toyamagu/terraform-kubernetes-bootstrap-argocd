@@ -2,13 +2,6 @@ name: 'tfsec/Terraform GitHub Actions'
 on: [pull_request]
 jobs:
   terraform-ci:
-    strategy:
-      matrix:
-        working_dirs: [
-          "./",
-          "tests/eks",
-          "tests/kind"
-        ]
     name: terraform-ci
     runs-on: ubuntu-latest
 
@@ -18,12 +11,13 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
+
       - name: tfsec
         uses: reviewdog/action-tfsec@master
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
-          working_directory: ${{ matrix.working_dirs }}
+          working_directory: ./
           level: info
           
       - name: Setup terraform
@@ -31,14 +25,14 @@ jobs:
       
       - name: Terraform fmt
         id: fmt
-        run: terraform fmt -check
+        run: terraform fmt -check -recursive
         continue-on-error: true
-        working-directory: ${{ matrix.working_dirs }}
+        working-directory: ./
 
       - name: Render terraform docs and push changes back to PR
         uses: terraform-docs/gh-actions@v1.0.0
         with:
-          working-dir: ./
+          working-dir: .,./tests/eks,tests/kind
           output-file: README.md
           output-method: inject
           git-push: "true"
