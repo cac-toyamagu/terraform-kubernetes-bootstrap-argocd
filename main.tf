@@ -21,7 +21,7 @@ resource "helm_release" "argocd_apps" {
   chart      = local.argocd_apps.helm_chart
   namespace  = local.argocd_apps.namespace
   values     = local.argocd_apps.helm_values
-  #version    = local.argocd_apps.helm_version
+  version    = local.argocd_apps.helm_version
 
   timeout = local.helm_config.timeout
 

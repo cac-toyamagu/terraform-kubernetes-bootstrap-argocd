@@ -14,12 +14,11 @@ locals {
   }
 
   argocd_apps = {
-    name       = var.argocd_apps_name
-    namespace  = var.argocd_namespace
-    helm_repo  = var.argocd_helm_repo
-    helm_chart = var.argocd_apps_helm_chart
-    #helm_version = "5.4.3"
-    helm_values = concat(var.argocd_projects, var.argocd_applications)
-    #helm_values = concat(var.argocd_applications)
+    name         = var.argocd_apps_name
+    namespace    = var.argocd_namespace
+    helm_repo    = var.argocd_helm_repo
+    helm_chart   = var.argocd_apps_helm_chart
+    helm_version = var.argocd_apps_helm_version
+    helm_values  = concat(var.argocd_projects, var.argocd_applications)
   }
 }
