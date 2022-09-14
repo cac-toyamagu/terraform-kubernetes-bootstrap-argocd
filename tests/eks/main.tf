@@ -3,6 +3,7 @@ terraform {
   }
 }
 
+# Create VPC
 module "vpc" {
   source                = "terraform-aws-modules/vpc/aws"
   version               = "3.14.4"
@@ -18,7 +19,7 @@ module "vpc" {
   enable_dns_hostnames  = true
 }
 
-# STEP 2: Create EKS cluster 
+# Create EKS Cluster
 module "eks" {
   source                          = "terraform-aws-modules/eks/aws"
   version                         = "18.29.0"
@@ -78,6 +79,7 @@ module "eks" {
   }
 }
 
+# Install ArgoCD
 module "argocd" {
   source             = "../../"
   argocd_helm_values = local.helm_values
@@ -101,6 +103,8 @@ module "argocd" {
   ]
 }
 
+
+# Create K8s namespace
 resource "kubernetes_namespace" "argocd_apps" {
   metadata {
     name = "argocd-apps"
@@ -149,30 +153,4 @@ resource "aws_ssm_parameter" "client_secret" {
       value
     ]
   }
-}
-
-# If sso_credentials are set, exec script which register sso credentials to SSM parameter store.
-resource "null_resource" "register_secret" {
-  count = local.sso_credentials.is_set ? 1 : 0
-  triggers = {
-    run_always = "${timestamp()}"
-  }
-  provisioner "local-exec" {
-    environment = {
-      CLIENT_ID          = local.sso_credentials.values.client_id
-      CLIENT_SECRET      = local.sso_credentials.values.client_secret
-      CLIENT_ID_NAME     = aws_ssm_parameter.client_id.name
-      CLIENT_SECRET_NAME = aws_ssm_parameter.client_secret.name
-    }
-    command     = "${path.cwd}/scripts/register_aws_ssm_pms.sh"
-    interpreter = ["bash"]
-  }
-}
-
-data "aws_ssm_parameter" "client_id" {
-  name = aws_ssm_parameter.client_id.name
-}
-
-data "aws_ssm_parameter" "client_secret" {
-  name = aws_ssm_parameter.client_secret.name
 }

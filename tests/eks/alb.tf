@@ -5,7 +5,7 @@ resource "aws_lb" "eks" {
   subnets            = module.vpc.public_subnets
   security_groups = [
     aws_security_group.alb.id,
-    module.eks.node_security_group_id
+    module.eks.node_security_group_id # for health check to Node group
   ]
 }
 
@@ -13,7 +13,7 @@ resource "aws_lb_listener" "https" {
   load_balancer_arn = aws_lb.eks.arn
   port              = "443"
   protocol          = "HTTPS"
-  certificate_arn   = aws_acm_certificate_validation.alb.certificate_arn
+  certificate_arn   = aws_acm_certificate_validation.argo.certificate_arn
 
   default_action {
     type = "fixed-response"
@@ -30,7 +30,7 @@ resource "aws_lb_listener_rule" "argo" {
   priority     = 100
   action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.alb_argo.arn
+    target_group_arn = aws_lb_target_group.argo.arn
   }
   condition {
     path_pattern {
@@ -39,7 +39,8 @@ resource "aws_lb_listener_rule" "argo" {
   }
 }
 
-resource "aws_lb_target_group" "alb_argo" {
+# ALB TG. Port 30080 is fixed nginx-ingress-controller NodePort
+resource "aws_lb_target_group" "argo" {
   name        = "${local.alb.target_group.argo}-${substr(uuid(), 0, 4)}"
   port        = 30080
   protocol    = "HTTP"
@@ -50,7 +51,7 @@ resource "aws_lb_target_group" "alb_argo" {
     protocol = "HTTP"
     timeout  = 2
     interval = 5
-    path     = "/nginx-health"
+    path     = "/nginx-health" # health check path for nginx ingress controller
   }
 
   lifecycle {
@@ -61,7 +62,13 @@ resource "aws_lb_target_group" "alb_argo" {
   }
 }
 
-resource "aws_acm_certificate" "alb" {
+resource "aws_autoscaling_attachment" "argo" {
+  autoscaling_group_name = module.eks.eks_managed_node_groups["one"].node_group_autoscaling_group_names[0]
+  lb_target_group_arn    = aws_lb_target_group.argo.arn
+}
+
+# ALB Certificate settings
+resource "aws_acm_certificate" "argo" {
   domain_name       = local.alb.public_record
   validation_method = "DNS"
 
@@ -70,9 +77,9 @@ resource "aws_acm_certificate" "alb" {
   }
 }
 
-resource "aws_route53_record" "alb_cert" {
+resource "aws_route53_record" "argo_cert" {
   for_each = {
-    for dvo in aws_acm_certificate.alb.domain_validation_options : dvo.domain_name => {
+    for dvo in aws_acm_certificate.argo.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
       record = dvo.resource_record_value
       type   = dvo.resource_record_type
@@ -87,12 +94,12 @@ resource "aws_route53_record" "alb_cert" {
   zone_id         = data.aws_route53_zone.public.zone_id
 }
 
-resource "aws_acm_certificate_validation" "alb" {
-  certificate_arn         = aws_acm_certificate.alb.arn
-  validation_record_fqdns = [for record in aws_route53_record.alb_cert : record.fqdn]
+resource "aws_acm_certificate_validation" "argo" {
+  certificate_arn         = aws_acm_certificate.argo.arn
+  validation_record_fqdns = [for record in aws_route53_record.argo_cert : record.fqdn]
 }
 
-resource "aws_route53_record" "alb" {
+resource "aws_route53_record" "argo" {
   zone_id = data.aws_route53_zone.public.id
   name    = local.alb.public_record
   type    = "A"
@@ -104,7 +111,3 @@ resource "aws_route53_record" "alb" {
   }
 }
 
-resource "aws_autoscaling_attachment" "asg_attachment_bar" {
-  autoscaling_group_name = module.eks.eks_managed_node_groups["one"].node_group_autoscaling_group_names[0]
-  lb_target_group_arn    = aws_lb_target_group.alb_argo.arn
-}
