@@ -96,6 +96,7 @@ module "argocd" {
     kubernetes_namespace.argocd_apps,
     kubernetes_namespace.infra,
     module.eks,
+    module.vpc,
     null_resource.register_secret
   ]
 }
@@ -106,7 +107,8 @@ resource "kubernetes_namespace" "argocd_apps" {
   }
 
   depends_on = [
-    module.eks
+    module.eks,
+    module.vpc
   ]
 }
 
@@ -117,7 +119,8 @@ resource "kubernetes_namespace" "infra" {
   }
 
   depends_on = [
-    module.eks
+    module.eks,
+    module.vpc
   ]
 }
 
