@@ -55,6 +55,6 @@ No modules.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_argocd_apps_helm_values"></a> [argocd\_apps\_helm\_values](#output\_argocd\_apps\_helm\_values) | n/a |
-| <a name="output_argocd_helm_values"></a> [argocd\_helm\_values](#output\_argocd\_helm\_values) | n/a |
+| <a name="output_argocd_apps_helm_values"></a> [argocd\_apps\_helm\_values](#output\_argocd\_apps\_helm\_values) | Merged helm values for argocd-apps. JSON encoded. |
+| <a name="output_argocd_helm_values"></a> [argocd\_helm\_values](#output\_argocd\_helm\_values) | Merged helm values for argocd. JSON encoded. |
 <!-- END_TF_DOCS -->
