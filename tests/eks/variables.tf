@@ -3,7 +3,6 @@ variable "eks_version" {
   type        = string
   default     = "1.23"
 }
-
 variable "aws_region" {
   description = "AWS region"
   type        = string
@@ -76,5 +75,10 @@ variable "github_org" {
   description = "GitHub organiztion for sso"
   type        = string
   default     = ""
+}
 
+variable "github_org_team" {
+  description = "GitHub organiztion team for sso"
+  type        = string
+  default     = ""
 }

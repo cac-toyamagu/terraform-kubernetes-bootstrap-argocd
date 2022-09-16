@@ -31,7 +31,7 @@ server:
     # but will see no apps, projects, etc...
      policy.default: role:readonly
      policy.csv: |
-      g, ${github_org}, role:admin
+      g, ${github_org}:${github_org_team}, role:admin
 
 repoServer:
   autoscaling:
