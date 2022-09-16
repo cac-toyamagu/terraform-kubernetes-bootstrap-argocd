@@ -13,7 +13,7 @@ server:
     - --insecure
 
   config:
-    url: "https://argocd.anderson-dirac.com"
+    url: ${host}
     dex.config: |
       connectors:
         # GitHub example
@@ -23,13 +23,15 @@ server:
           config:
             clientID: $eks-cluster-with-argo-sso:clientId
             clientSecret: $eks-cluster-with-argo-sso:clientSecret
-          orgs:
-          - name: test-org
+            orgs:
+            - name: ${github_org}
   rbacConfig:
     # policy.default is the name of the default role which Argo CD will falls back to, when
     # authorizing API requests (optional). If omitted or empty, users may be still be able to login,
     # but will see no apps, projects, etc...
-     policy.default: role:admin
+     policy.default: role:readonly
+     policy.csv: |
+      g, ${github_org}, role:admin
 
 repoServer:
   autoscaling:

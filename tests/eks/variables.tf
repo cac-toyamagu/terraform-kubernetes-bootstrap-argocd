@@ -71,3 +71,10 @@ variable "sso_client_secret" {
   type        = string
   default     = null
 }
+
+variable "github_org" {
+  description = "GitHub organiztion for sso"
+  type        = string
+  default     = ""
+
+}

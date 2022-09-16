@@ -18,7 +18,11 @@ locals {
 
 //ArgoCDV
 locals {
-  helm_values = [templatefile("${path.module}/values.yaml", {})]
+  argocd_helm_vars = {
+    host       = local.alb.public_record
+    github_org = var.github_org
+  }
+  helm_values = [templatefile("${path.module}/values.yaml", local.argocd_helm_vars)]
   argocd_applications_vars = {
     repo_url        = var.argocd_apps_repo
     target_revision = var.argocd_apps_target_revision
