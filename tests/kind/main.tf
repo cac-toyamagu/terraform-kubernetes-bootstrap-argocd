@@ -74,4 +74,7 @@ resource "kubernetes_namespace" "argocd_apps" {
 resource "kubectl_manifest" "applicationsets" {
   for_each  = { for ind, item in local.argocd_applicationsets : ind => item }
   yaml_body = each.value
+  depends_on = [
+    module.argocd
+  ]
 }
