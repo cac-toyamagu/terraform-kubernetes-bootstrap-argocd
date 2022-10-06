@@ -40,26 +40,24 @@ extraObjects:
 - apiVersion: argoproj.io/v1alpha1
   kind: ApplicationSet
   metadata:
-    name: cluster-addons
+    name: kustomize-guestbook
     namespace: argocd
   spec:
     generators:
     - git:
-        repoURL: https://github.com/argoproj/argo-cd.git
-        revision: HEAD
+        repoURL: ${repo_url}
+        revision: ${target_revision}
         directories:
-        - path: applicationset/examples/git-generator-directory/excludes/cluster-addons/*
-        - path: applicationset/examples/git-generator-directory/excludes/cluster-addons/exclude-helm-guestbook
-          exclude: true
+        - path: ${path}
     template:
       metadata:
         name: '{{`{{path.basename}}`}}'
       spec:
-        project: "my-project"
+        project: argocd-apps
         source:
-          repoURL: https://github.com/argoproj/argo-cd.git
-          targetRevision: HEAD
+          repoURL: ${repo_url}
+          targetRevision: ${target_revision}
           path: '{{`{{path}}`}}'
         destination:
           server: https://kubernetes.default.svc
-          namespace: '{{`{{path.basename}}`}}'
+          namespace: argocd-apps
