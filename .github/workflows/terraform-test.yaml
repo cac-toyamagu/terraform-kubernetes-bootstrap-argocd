@@ -48,7 +48,7 @@ jobs:
       - name: Check number of pods in argocd-apps namespace
         run: |
           POD_NUM=`kubectl get po -n argocd-apps | grep guestbook | wc -l`
-          if [ $POD_NUM -ne 1 ]; then
+          if [ $POD_NUM -ne 2 ]; then
             echo "Invalid pod number. The test application may not be deployed."
             exit 1
           fi

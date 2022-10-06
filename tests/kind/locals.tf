@@ -2,7 +2,9 @@ locals {
   kind = {
     cluster_name = var.kind_cluster_name
   }
-  helm_values = var.read_local_helm_values ? [templatefile("${path.module}/values.yaml", {})] : []
+  helm_values_vars = {
+  }
+  helm_values = var.read_local_helm_values ? [templatefile("${path.module}/values.yaml", local.helm_values_vars)] : []
   argocd_applications_vars = {
     repo_url        = var.argocd_apps_repo
     target_revision = var.argocd_apps_target_revision
@@ -17,4 +19,15 @@ locals {
   argocd_projects = [
     templatefile("${path.module}/argocd/projects/projects.yaml.tftpl", local.argocd_projects_vars)
   ]
+
+  argocd_applicationsets_vars = {
+    repo_url        = var.argocd_apps_repo
+    target_revision = var.argocd_apps_target_revision
+    path            = "tests/kind/argocd/kustomize-guestbook"
+  }
+
+  argocd_applicationsets = [
+    templatefile("${path.module}/argocd/applicationsets/applicationsets.tftpl.yaml", local.argocd_applicationsets_vars)
+  ]
+
 }
