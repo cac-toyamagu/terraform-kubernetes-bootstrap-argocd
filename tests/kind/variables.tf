@@ -10,24 +10,6 @@ variable "read_local_helm_values" {
   default     = true
 }
 
-variable "sso-secret-name" {
-  description = "SSO secret name"
-  type        = string
-  default     = "sso-client-secret"
-}
-
-variable "client_secret" {
-  description = "SSO client secret"
-  type        = string
-  default     = "ClientSecert"
-}
-
-variable "client_id" {
-  description = "SSO client Id"
-  type        = string
-  default     = "ClientId"
-}
-
 variable "argocd_apps_repo" {
   description = "Argocd apps repository."
   type        = string

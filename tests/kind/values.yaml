@@ -25,6 +25,15 @@ server:
             clientSecret: $test-sso-secret:clientSecret
           orgs:
           - name: test-org
+        # GitHub example
+        - type: github
+          id: github
+          name: GitHub
+          config:
+            clientID: $test-sso-secret-hogehoge:clientId
+            clientSecret: $test-sso-secret-hogehoge:clientSecret
+          orgs:
+          - name: test-org
   rbacConfig:
     # policy.default is the name of the default role which Argo CD will falls back to, when
     # authorizing API requests (optional). If omitted or empty, users may be still be able to login,

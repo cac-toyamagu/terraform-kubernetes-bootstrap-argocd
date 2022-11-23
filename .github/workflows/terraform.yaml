@@ -29,6 +29,16 @@ jobs:
         continue-on-error: true
         working-directory: ./
 
+      - name: Setup tflint
+        uses: terraform-linters/setup-tflint@v1
+        with:
+          tflint_version: latest
+      - name: Init tflint
+        run: tflint --init
+      - name: Run tflint
+        id: tflint
+        run: find . -not -path "*/.terraform/*" -type f -name '*.tf' -exec dirname {} \; | sort -u | xargs -n 1 tflint
+
       - name: Render terraform docs and push changes back to PR
         uses: terraform-docs/gh-actions@v1.0.0
         with:

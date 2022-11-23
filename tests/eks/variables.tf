@@ -23,18 +23,6 @@ variable "aws_default_tags" {
   }
 }
 
-variable "client_secret" {
-  description = "SSO client secret"
-  type        = string
-  default     = "ClientSecert"
-}
-
-variable "client_id" {
-  description = "SSO client Id"
-  type        = string
-  default     = "ClientId"
-}
-
 variable "argocd_apps_repo" {
   description = "Argocd apps repository."
   type        = string
