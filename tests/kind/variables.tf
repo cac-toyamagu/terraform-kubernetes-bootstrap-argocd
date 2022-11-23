@@ -21,3 +21,15 @@ variable "argocd_apps_target_revision" {
   type        = string
   default     = "main"
 }
+
+variable "client_secret" {
+  description = "SSO client secret"
+  type        = string
+  default     = "ClientSecert"
+}
+
+variable "client_id" {
+  description = "SSO client Id"
+  type        = string
+  default     = "ClientId"
+}
