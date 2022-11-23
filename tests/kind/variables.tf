@@ -10,10 +10,16 @@ variable "read_local_helm_values" {
   default     = true
 }
 
-variable "sso-secret-name" {
-  description = "SSO secret name"
+variable "argocd_apps_repo" {
+  description = "Argocd apps repository."
   type        = string
-  default     = "sso-client-secret"
+  default     = "https://github.com/toyamagu-2021/terraform-kubernetes-bootstrap-argocd.git"
+}
+
+variable "argocd_apps_target_revision" {
+  description = "Argocd apps target revision."
+  type        = string
+  default     = "main"
 }
 
 variable "client_secret" {
@@ -26,16 +32,4 @@ variable "client_id" {
   description = "SSO client Id"
   type        = string
   default     = "ClientId"
-}
-
-variable "argocd_apps_repo" {
-  description = "Argocd apps repository."
-  type        = string
-  default     = "https://github.com/toyamagu-2021/terraform-kubernetes-bootstrap-argocd.git"
-}
-
-variable "argocd_apps_target_revision" {
-  description = "Argocd apps target revision."
-  type        = string
-  default     = "main"
 }
